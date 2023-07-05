@@ -1,0 +1,157 @@
+{
+        "$schema": "http://json-schema.org/draft-07/schema",
+        "type": "object",
+        "properties": {
+            "Vishwaas": {
+                "$ref": "#/definitions/Vishwaas"
+            }
+        },
+        "required": [
+            "Vishwaas"
+        ],
+        "title": "Vishwaas",
+        "definitions": {
+            "Vishwaas": {
+                "$id": "#/properties/Vishwaas",
+                "type": "object",
+                "title": "The Vishwaas Schema",
+                "required": [
+                    "name",
+                    "entitytype",
+                    "rebitversion",
+                    "purposecode",
+                    "fitype",
+                    "expired"
+                   
+                    
+
+                   
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "entitytype": {
+                        "type": "string",
+                        "title": "entity type"
+                    },
+
+                    "rebitversion": {
+                        "type": "string"
+                       
+                    },
+                    "purposecode": {
+                        "type": "integer"
+                       
+                    },
+                    "fitype": {
+                        "type": "string"
+                       
+                    },
+                    "expired": {
+                        "type": "string",
+                        "format": "date"
+                       
+                    }
+                   
+                   
+                    
+                }
+            }
+        },
+        "_osConfig": {
+            "uniqueIndexFields": [
+                "id"
+            ],
+            "systemFields": [
+                "_osCreatedAt",
+                "_osUpdatedAt",
+                "_osCreatedBy",
+                "_osUpdatedBy",
+                "_osAttestedData",
+                "_osClaimId",
+                "_osState"
+              ],
+         
+            "roles": ["admin"],
+            "inviteRoles": [
+                "admin"
+            ],
+            "enableLogin": false,
+            "credentialTemplate": {
+                "@context": [
+                  "https://www.w3.org/2018/credentials/v1",
+                  {
+                    "@context": {
+                      "@version": 1.1,
+                      "@protected": true,
+                      "SkillCertificate": {
+                        "@id": "https://github.com/sunbird-specs/vc-specs#SkillCertificate",
+                        "@context": {
+                          "id": "@id",
+                          "@version": 1.1,
+                          "@protected": true,
+                          "skills": "schema:Text"
+                        }
+                      },
+                      "Person":{
+                        "@id":"https://github.com/sunbird-specs/vc-specs#Person",
+                        "@context": {
+                          "name":"schema:Text"
+                        }
+                      },
+                      "entitytype":{
+                        "@id":"https://github.com/sunbird-specs/vc-specs#entitytype",
+                        "@context": {
+                          "name":"schema:Text"
+                        }
+                      },
+                      "purposecode":{
+                        "@id":"https://github.com/sunbird-specs/vc-specs#purposecode",
+                        "@context": {
+                          "name":"schema:Text"
+                        }
+                      },
+                      "rebitversion": {
+                        "@id":"https://github.com/sunbird-specs/vc-specs#rebitversion",
+                        "@context": {
+                          "name":"schema:Text"
+                        }
+                      },
+                      "fitype": {
+                        "@id":"https://github.com/sunbird-specs/vc-specs#fitype",
+                        "@context": {
+                          "name":"schema:Text"
+                        }
+                      },
+                      "expired": {
+                        "@id":"https://github.com/sunbird-specs/vc-specs#fitype",
+                        "@context": {
+                          "name":"schema:Date"
+                        }
+                      }
+                      
+                    }
+                  }
+                ],
+                "type": [
+                  "VerifiableCredential"
+                ],
+                "issuanceDate": "2021-08-27T10:57:57.237Z",
+                "credentialSubject": {
+                  "type": "Person",
+                  "name": "{{name}}",
+                  "entitytype": "{{entitytype}}",
+                  "purposecode":"{{purposecode}}",
+                  "rebitversion":"{{rebitversion}}",
+                  "fitype":"{{fitype}}",
+                  "expired":"{{expiredon}}"
+                  
+                },
+                "issuer": "did:web:sunbirdrc.dev/vc/skill"
+              },
+            "certificateTemplates": {
+                "svg": "https://raw.githubusercontent.com/TaherKing/localrepo/2ebbeb83785a0c4ec9bf0bd409ea95e7cee0ce3b/trainingCertificateTemplate3.svg"
+            }
+        }
+    }

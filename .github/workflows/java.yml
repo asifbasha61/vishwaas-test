@@ -21,6 +21,8 @@ jobs:
 
     - name: Build with Maven
       run: mvn clean install
+      with:
+        context: ./PortalBackend/Java
 
     - name: Build and push docker image
       uses: docker/build-push-action@v2

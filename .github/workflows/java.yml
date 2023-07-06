@@ -23,9 +23,6 @@ jobs:
       run: mvn clean install
       working-directory: ./PortalBackend/Java
 
-    - name: checkout the code
-      uses: actions/checkout@v3
-
     - name: Build and push docker image
       uses: docker/build-push-action@v2
       with:

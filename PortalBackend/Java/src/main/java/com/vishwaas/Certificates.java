@@ -1,20 +1,18 @@
-package Vishwaas;
+package com.vishwaas;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 public class Certificates {
+	//Parameter for Certificate API
     @Value("${baseURL}")
     private String baseURL;
 
@@ -40,21 +38,17 @@ public class Certificates {
 
     @Autowired
     private CertificateData certificateData;
-
+    
+    //Certificate API is called 
     @PostMapping(path = "/api/v1/Certificates", consumes = "application/json")
-    public ObjectNode certificateAPI(@RequestBody CertificateData certificateData) {
-		
-
+    public ObjectNode certificateAPI(@RequestBody CertificateData certificateData) {		
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer " + token.getToken());
-        HttpEntity<CertificateData> requestEntity = new HttpEntity<>(certificateData, headers);
+        headers.set("Authorization", "Bearer " + token.getToken());    
 
-        return certificate.checkCertificate(certificateData);
-    }
-
-	
+        return certificate.checkCertificate(certificateData);      
+    }	
 }
 
 	

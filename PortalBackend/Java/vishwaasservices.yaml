@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vishwaas
+spec:
+  type: LoadBalancer
+  selector:
+    app: vishwaas
+  ports:
+    - port: 8090
+      targetPort: 8090
+      

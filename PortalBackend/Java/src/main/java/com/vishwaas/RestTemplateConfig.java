@@ -1,4 +1,4 @@
-package Vishwaas;
+package com.vishwaas;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

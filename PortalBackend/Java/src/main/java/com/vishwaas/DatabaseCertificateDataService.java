@@ -1,6 +1,5 @@
-package Vishwaas;
+package com.vishwaas;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -8,14 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
-
-
 @Component
 public class DatabaseCertificateDataService implements Service{
 	 @Value("${certificateApiUrl}")
-	    private String certificateApiUrl;
-
-	   
+	    private String certificateApiUrl;	   
 	 @ResponseBody
 	    @Override
 	    public CertificateData getCertificateData() 

@@ -1,8 +1,9 @@
-package Vishwaas;
+package com.vishwaas;
 
 
 
 import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import org.springframework.web.util.UriUtils;
 @Component
 @ComponentScan(basePackages = "com.example.Vishwaas")
 public class Token {
+	//Parameter to generate token
     @Value("${keycloak.baseurl}")
     private String keycloakUrl;
 
@@ -78,13 +80,17 @@ public class Token {
 		this.clientSecret = clientSecret;
 	}
 
-//	private RestTemplate restTemplate;
-
+	
+	    
+	   
     public void setRestTemplate(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
-
-    public String getToken() {
+    
+    private static final Logger logger = Logger.getLogger(Token.class.getName());
+    //Token is generated
+    @SuppressWarnings("deprecation")
+	public String getToken() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -97,11 +103,11 @@ public class Token {
         if (response.getStatusCode() == HttpStatus.OK) {
             String token = response.getBody();
             JSONObject json = new JSONObject(token);
-            String accessToken = json.getString("access_token");
+            
 
-            return accessToken;
+            return json.getString("access_token");
         } else {
-            System.out.println("Failed to retrieve token. Status code: " + response.getStatusCodeValue());
+        	 logger.severe("Failed to retrieve token. Status code: " + response.getStatusCodeValue());
             
         }
 		return null;

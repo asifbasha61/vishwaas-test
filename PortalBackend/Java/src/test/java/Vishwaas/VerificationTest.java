@@ -11,10 +11,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.vishwaas.CertificateData;
+import com.vishwaas.Token;
+import com.vishwaas.Verification;
+import com.vishwaas.Verify;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+
+
 
 @ExtendWith(MockitoExtension.class)
 public class VerificationTest {
@@ -30,52 +35,38 @@ public class VerificationTest {
 
     @InjectMocks
     private Verification verifyAPI;
-  
 
-    @BeforeEach
-    public void setUp() {
-        
-    }
-
+   
     @Test
-    public void testVerifyAPi_Success() throws JsonProcessingException {
-        
+     void testVerifyAPi_Success() throws JsonProcessingException {
         String osid = "12345";
         String expectedResponse = "Success";
         Mockito.when(verify.verifyCertificate(eq(osid))).thenReturn(ResponseEntity.ok(expectedResponse));
 
- 
-        ResponseEntity<String> response = verifyAPI.verifyAPi(osid);
+        ResponseEntity<String> response = verifyAPI.verifyAPI(osid);
 
-       
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedResponse, response.getBody());
     }
 
     @Test
-    public void testVerifyAPi_IdNotPassed() throws JsonProcessingException {
-    
+     void testVerifyAPi_IdNotPassed() throws JsonProcessingException {
         String osid = null;
         Mockito.when(verify.verifyCertificate(eq(osid))).thenReturn(ResponseEntity.notFound().build());
 
-      
-        ResponseEntity<String> response = verifyAPI.verifyAPi(osid);
+        ResponseEntity<String> response = verifyAPI.verifyAPI(osid);
 
-                assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
-    public void testVerifyAPi_InvalidToken() throws JsonProcessingException {
-       
+     void testVerifyAPi_InvalidToken() throws JsonProcessingException {
         String osid = "12345";
         Mockito.when(verify.verifyCertificate(eq(osid))).thenReturn(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 
-      
-        ResponseEntity<String> response = verifyAPI.verifyAPi(osid);
+        ResponseEntity<String> response = verifyAPI.verifyAPI(osid);
 
-    
         assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
     }
-
 }
 

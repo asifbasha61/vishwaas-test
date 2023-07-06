@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vishwaas-deployment
+  labels:
+    app: vishwaas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vishwaas
+  template:
+    metadata:
+      labels:
+        app: vishwaas
+    spec:
+      containers:
+        - name: vishwaas
+          image: amithrangadhol/vishwaasjavacode:latest
+          ports:
+            - containerPort: 8000
+
+

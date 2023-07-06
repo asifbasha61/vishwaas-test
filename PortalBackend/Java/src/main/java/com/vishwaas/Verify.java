@@ -1,7 +1,8 @@
-package Vishwaas;
+package com.vishwaas;
 
 
 import java.util.Collections;
+import java.util.logging.Logger;
 
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Component
 public class Verify 
 {
+	//Parameter for RC verify certificate
 	 	@Value("${baseURL}")
 	    private String baseURL;
 
@@ -36,14 +37,16 @@ public class Verify
 	    @Value("${rc.Entity}")
 	    private String entity;
 	    @Value("${rc.Verify}")
-	    private String verify;
+	    private String ver;
 	    @Autowired
 	    private Token tokenTest;
-	    
-	    public ResponseEntity<String> verifyCertificate(String osid) throws JsonMappingException, JsonProcessingException {
+	    private static final Logger logger = Logger.getLogger(Verify.class.getName());
+
+	    //Verify certificate is called to verify the certificate
+	    public ResponseEntity<String> verifyCertificate(String osid) throws  JsonProcessingException {
 
 	        String certificateUrl = baseURL + ":" + port + entity + "/" + osid;
-	        String postUrl = baseURL + ":" + port + verify;
+	        String postUrl = baseURL + ":" + port + ver;
 	        HttpHeaders headers = new HttpHeaders();
 	        headers.setContentType(MediaType.APPLICATION_JSON);
 	        headers.setBearerAuth(tokenTest.getToken());
@@ -66,7 +69,7 @@ public class Verify
 	        if (getResponse.getStatusCode() == HttpStatus.OK) {
 	            JsonNode jsonNode = objectMapper.readTree(responseBody);
 	            String signedData = jsonNode.get("_osSignedData").asText();
-	         //   System.out.println("_osSignedData :" + signedData);
+	     
 
 	            String unescapedString = StringEscapeUtils.unescapeJava(signedData);
 
@@ -94,14 +97,18 @@ public class Verify
 	            if (postResponse.getStatusCode() == HttpStatus.OK) {
 	                return new ResponseEntity<>(postResponse.getBody(), HttpStatus.OK);
 	            } else {
-	                System.out.println("Failed to create certificate. Status code: " + postResponse.getStatusCode());
+	                logger.severe("Failed to create certificate. Status code: " + postResponse.getStatusCode());
 	                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 	            }
 	        } else if (getResponse.getStatusCode() == HttpStatus.NOT_FOUND) {
-	            System.out.println("Failed to retrieve certificate. Status code: " + getResponse.getStatusCode());
+	            logger.warning("Failed to retrieve certificate. Status code: " + getResponse.getStatusCode());
 	        }
 
 	        return new ResponseEntity<>(responseBody, getResponse.getStatusCode());
 	    }
+
+		
+
+		
 
 }

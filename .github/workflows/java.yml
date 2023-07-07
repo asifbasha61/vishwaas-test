@@ -48,6 +48,7 @@ jobs:
     - name: Build and push Docker image
       uses: azure/docker-login@v1
       with:
+        context: PortalBackend/Java
         login-server: vishwassregistry.azurecr.io
         username: ${{ secrets.AZURE_CLIENT_ID }}
         password: ${{ secrets.AZURE_CLIENT_SECRET }}

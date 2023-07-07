@@ -45,10 +45,10 @@ jobs:
           #tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           #subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Build and push Docker image
-      uses: azure/docker-login@v1
+    - name: login to docker resgistry
+      uses: docker/login-action@v1
       with:
-        context: PortalBackend/Java
+        #context: PortalBackend/Java
         login-server: vishwassregistry.azurecr.io
         username: ${{ secrets.AZURE_CLIENT_ID }}
         password: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -70,5 +70,4 @@ jobs:
       run: |
         kubectl apply -f Kubernetes/deployement.yaml
         kubectl apply -f Kubernetes/services.yaml
-
 

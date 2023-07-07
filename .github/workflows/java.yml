@@ -66,6 +66,9 @@ jobs:
         resource-group: vishwaas-rg
         cluster-name: vishwaas-cluster
 
-            #- name: Apply Kubernetes manifests
-            #run: |
-            #kubectl apply -f <path-to-your-manifests>
+    - name: Apply Kubernetes manifests
+      run: |
+        kubectl apply -f Kubernetes/deployement.yaml
+        kubectl apply -f Kubernetes/services.yaml
+
+

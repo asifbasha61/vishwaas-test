@@ -63,8 +63,8 @@ jobs:
       uses: azure/aks-set-context@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        resourceGroup: vishwaas-rg
-        clusterName: vishwaas-cluster
+        resource-group: vishwaas-rg
+        cluster-name: vishwaas-cluster
 
             #- name: Apply Kubernetes manifests
             #run: |

@@ -55,7 +55,8 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t vishwassregistry.azurecr.io/java_test:v1 .
+#        docker build -t vishwassregistry.azurecr.io/java_test:v1 .
+        docker image tag krishnarj/demo:latest  vishwassregistry.azurecr.io/java_test:v1
         docker push vishwassregistry.azurecr.io/java_test:v1
       working-directory: ./PortalBackend/Java
 

@@ -68,10 +68,5 @@ jobs:
 
     - name: Apply Kubernetes manifests
       run: |
-        kubectl apply -f Kubernetes/deployement.yaml
+        kubectl apply -f Kubernetes/deployment.yaml
         kubectl apply -f Kubernetes/services.yaml
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        resource-group: vishwaas-rg
-        cluster-name: vishwaas-cluster
-

@@ -1,92 +1,187 @@
 name: Java CI CD
-  
+
 on:
   push:
     branches: main
-      
-jobs: 
+
+jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       pages: write
       id-token: write
-      
+
     steps:
-    - name: checkout the code
-      uses: actions/checkout@v3
+      - name: checkout the code
+        uses: actions/checkout@v3
 
-    - name: Set up Java version
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: 'maven'
-    
-    - name: Build with Maven # also packages the application
-      run: mvn -B package -DskipTests --file pom.xml
-      working-directory: ./PortalBackend/Java
+      - name: Set up Java version
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
 
-    - name: Run Tests with Maven # also packages the application
-      run: mvn -B test -Dspring.profiles.active=test --file pom.xml
-      working-directory: ./PortalBackend/Java
+      - name: Build with Maven # also packages the application
+        run: mvn -B package -DskipTests --file pom.xml
+        working-directory: ./PortalBackend/Java
 
-    - name: Build and push docker image
-      uses: docker/build-push-action@v2
-      with:
-        context: PortalBackend/Java
-          #file: ./Dockerfile
+      - name: Run Tests with Maven # also packages the application
+        run: mvn -B test -Dspring.profiles.active=test --file pom.xml
+        working-directory: ./PortalBackend/Java
 
-    - name: Log in to Azure
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-          #client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          #tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          #subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Build and push docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: PortalBackend/Java
 
-    - name: login to docker resgistry
-      uses: azure/docker-login@v1
-      with:
-        #context: PortalBackend/Java
-        login-server: vishwassregistry.azurecr.io
-        username: ${{ secrets.AZURE_CLIENT_ID }}
-        password: ${{ secrets.AZURE_CLIENT_SECRET }}
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-    - name: Build and push Docker image
-      run: |
-        docker image tag krishnarj/demo:latest  vishwassregistry.azurecr.io/java_test:v1
-        docker push vishwassregistry.azurecr.io/java_test:v1
-      working-directory: ./PortalBackend/Java
+      - name: login to docker registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: vishwassregistry.azurecr.io
+          username: ${{ secrets.AZURE_CLIENT_ID }}
+          password: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+      - name: Build and push Docker image
+        run: |
+          docker image tag krishnarj/demo:latest  vishwassregistry.azurecr.io/java_test:v1
+          docker push vishwassregistry.azurecr.io/java_test:v1
+        working-directory: ./PortalBackend/Java
+
+      - name: Deploy to AKS
+        uses: azure/aks-set-context@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          resource-group: vishwaas-rg
+          cluster-name: vishwaas-cluster
+
+      - name: Creating AKS
+        uses: Azure/k8s-create-secret@v1.1
+        with:
+          container-registry-url: vishwassregistry.azurecr.io
+          container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
+          container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
+          secret-name: vishwassregistry-k8s-secret
+
+      - name: Apply Kubernetes manifests
+        uses: Azure/k8s-deploy@v4
+        with:
+          action: deploy
+          manifests: |
+            Kubernetes/deployment.yaml
+            Kubernetes/service.yaml
+          images: |
+            vishwassregistry.azurecr.io/java_test:v1
+          imagepullsecrets: |
+            vishwassregistry-k8s-secret
 
 
-    - name: Deploy to AKS
-      uses: azure/aks-set-context@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-        resource-group: vishwaas-rg
-        cluster-name: vishwaas-cluster
-
-    - name: Creating AKS
-      uses: Azure/k8s-create-secret@v1.1
-      with:
-        container-registry-url: vishwassregistry.azurecr.io
-        container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
-        container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
-        secret-name: vishwassregistry-k8s-secret
 
 
-    - name: Apply Kubernetes manifests
-      uses: Azure/k8s-deploy@v4
-      with:
-        action: deploy
-        manifests: |
-          Kubernetes/deployment.yaml
-          Kubernetes/service.yaml
-        images: |
-          vishwassregistry.azurecr.io/java_test:v1
-        imagepullsecrets: |
-          vishwassregistry-k8s-secret
+
+
+
+
+
+
+
+
+
+#name: Java CI CD
+#
+#on:
+#  push:
+#    branches: main
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    permissions:
+#      contents: read
+#      pages: write
+#      id-token: write
+#
+#    steps:
+#    - name: checkout the code
+#      uses: actions/checkout@v3
+#
+#    - name: Set up Java version
+#      uses: actions/setup-java@v3
+#      with:
+#        java-version: '17'
+#        distribution: 'temurin'
+#        cache: 'maven'
+#
+#    - name: Build with Maven # also packages the application
+#      run: mvn -B package -DskipTests --file pom.xml
+#      working-directory: ./PortalBackend/Java
+#
+#    - name: Run Tests with Maven # also packages the application
+#      run: mvn -B test -Dspring.profiles.active=test --file pom.xml
+#      working-directory: ./PortalBackend/Java
+#
+#    - name: Build and push docker image
+#      uses: docker/build-push-action@v2
+#      with:
+#        context: PortalBackend/Java
+#          #file: ./Dockerfile
+#
+#    - name: Log in to Azure
+#      uses: azure/login@v1
+#      with:
+#        creds: ${{ secrets.AZURE_CREDENTIALS }}
+#          #client-id: ${{ secrets.AZURE_CLIENT_ID }}
+#          #tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+#          #subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#
+#    - name: login to docker resgistry
+#      uses: azure/docker-login@v1
+#      with:
+#        #context: PortalBackend/Java
+#        login-server: vishwassregistry.azurecr.io
+#        username: ${{ secrets.AZURE_CLIENT_ID }}
+#        password: ${{ secrets.AZURE_CLIENT_SECRET }}
+#
+#    - name: Build and push Docker image
+#      run: |
+#        docker image tag krishnarj/demo:latest  vishwassregistry.azurecr.io/java_test:v1
+#        docker push vishwassregistry.azurecr.io/java_test:v1
+#      working-directory: ./PortalBackend/Java
+#
+#
+#    - name: Deploy to AKS
+#      uses: azure/aks-set-context@v1
+#      with:
+#        creds: ${{ secrets.AZURE_CREDENTIALS }}
+#        resource-group: vishwaas-rg
+#        cluster-name: vishwaas-cluster
+#
+#    - name: Creating AKS
+#      uses: Azure/k8s-create-secret@v1.1
+#      with:
+#        container-registry-url: vishwassregistry.azurecr.io
+#        container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
+#        container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
+#        secret-name: vishwassregistry-k8s-secret
+#
+#
+#    - name: Apply Kubernetes manifests
+#      uses: Azure/k8s-deploy@v4
+#      with:
+#        action: deploy
+#        manifests: |
+#          Kubernetes/deployment.yaml
+#          Kubernetes/service.yaml
+#        images: |
+#          vishwassregistry.azurecr.io/java_test:v1
+#        imagepullsecrets: |
+#          vishwassregistry-k8s-secret
 
 #    - name: Apply Kubernetes manifests
 #      run: |

@@ -81,7 +81,7 @@ jobs:
         action: deploy
         manifests: |
           Kubernetes/deployment.yaml
-          kubernetes/services.yaml
+          kubernetes/service.yaml
         images: |
           vishwassregistry.azurecr.io/java_test:v1
         imagepullsecrets: |
@@ -90,4 +90,4 @@ jobs:
 #    - name: Apply Kubernetes manifests
 #      run: |
 #        kubectl apply -f Kubernetes/deployment.yaml
-#        kubectl apply -f Kubernetes/services.yaml
+#        kubectl apply -f Kubernetes/service.yaml

@@ -67,7 +67,7 @@ jobs:
         cluster-name: vishwaas-cluster
 
     - name: Creating AKS
-    - uses: Azure/k8s-create-secret@v1.1
+      uses: Azure/k8s-create-secret@v1.1
       with:
         container-registry-url: vishwassregistry.azurecr.io
         container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
@@ -76,7 +76,7 @@ jobs:
 
 
     - name: Apply Kubernetes manifests
-    - uses: Azure/k8s-deploy@v4
+      uses: Azure/k8s-deploy@v4
       with:
         action: deploy
         manifests: |

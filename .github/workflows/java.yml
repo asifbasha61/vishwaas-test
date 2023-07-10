@@ -49,11 +49,13 @@ jobs:
           password: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Build and push Docker image
+        working-directory: ./PortalBackend/Java
         run: |
           docker pull krishnarj/demo:latest
           docker image tag krishnarj/demo:latest  vishwassregistry.azurecr.io/java_test:v1
-          docker push vishwassregistry.azurecr.io/java_test:v1
-        working-directory: ./PortalBackend/Java
+          docker push vishwassregistry.azurecr.io/java_test:v1,
+
+        # working-directory: ./PortalBackend/Java
 
       - name: Deploy to AKS
         uses: azure/aks-set-context@v1

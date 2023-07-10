@@ -19,5 +19,20 @@ spec:
           image: vishwassregistry.azurecr.io/java_test:v1
           ports:
             - containerPort: 8000
-
-
+        - name: postgres
+          image: postgres:latest
+          env:
+            - name: POSTGRES_USER
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: root
+            - name: POSTGRES_DB
+              value: postgres
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+              - name: postgres-data
+                mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data
+          emptyDir: { }

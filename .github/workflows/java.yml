@@ -80,8 +80,8 @@ jobs:
       with:
         action: deploy
         manifests: |
-          Kubernetes/deployment.yml
-          kubernetes/service.yml
+          Kubernetes/deployment.yaml
+          kubernetes/services.yaml
         images: |
           vishwassregistry.azurecr.io/java_test:v1
         imagepullsecrets: |

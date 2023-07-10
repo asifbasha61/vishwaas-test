@@ -66,7 +66,28 @@ jobs:
         resource-group: vishwaas-rg
         cluster-name: vishwaas-cluster
 
+    - name: Creating AKS
+    - uses: Azure/k8s-create-secret@v1.1
+      with:
+        container-registry-url: vishwassregistry.azurecr.io
+        container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
+        container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
+#       secret-name: demo-k8s-secret
+
+
     - name: Apply Kubernetes manifests
-      run: |
-        kubectl apply -f Kubernetes/deployment.yaml
-        kubectl apply -f Kubernetes/services.yaml
+    - uses: Azure/k8s-deploy@v4
+      with:
+        action: deploy
+        manifests: |
+          Kubernetes/deployment.yml
+          kubernetes/service.yml
+        images: |
+          vishwassregistry.azurecr.io/java_test:v1
+#        imagepullsecrets: |
+#            demo-k8s-secret
+
+#    - name: Apply Kubernetes manifests
+#      run: |
+#        kubectl apply -f Kubernetes/deployment.yaml
+#        kubectl apply -f Kubernetes/services.yaml

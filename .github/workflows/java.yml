@@ -72,7 +72,7 @@ jobs:
         container-registry-url: vishwassregistry.azurecr.io
         container-registry-username: ${{ secrets.AZURE_CLIENT_ID }}
         container-registry-password: ${{ secrets.AZURE_CLIENT_SECRET }}
-#       secret-name: demo-k8s-secret
+        secret-name: vishwassregistry-k8s-secret
 
 
     - name: Apply Kubernetes manifests
@@ -84,8 +84,8 @@ jobs:
           kubernetes/service.yml
         images: |
           vishwassregistry.azurecr.io/java_test:v1
-#        imagepullsecrets: |
-#            demo-k8s-secret
+        imagepullsecrets: |
+          vishwassregistry-k8s-secret
 
 #    - name: Apply Kubernetes manifests
 #      run: |

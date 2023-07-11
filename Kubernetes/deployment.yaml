@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: vishwaas
-          image: vishwassregistry.azurecr.io/java_test:v1
+          image: krishnarj/demo:latest
           ports:
             - containerPort: 8000
 

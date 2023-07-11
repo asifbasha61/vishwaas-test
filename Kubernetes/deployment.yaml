@@ -18,6 +18,6 @@ spec:
         - name: vishwaas
           image: vishwassregistry.azurecr.io/java_test:v1
           ports:
-            - containerPort: 8000
+            - containerPort: 8080
 
 

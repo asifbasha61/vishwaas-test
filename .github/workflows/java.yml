@@ -50,7 +50,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-#          docker pull krishnarj/demo:latest
+          docker pull krishnarj/demo:latest
           docker image tag krishnarj/demo:latest  vishwassregistry.azurecr.io/java_test:v1
           docker push vishwassregistry.azurecr.io/java_test:v1
         working-directory: ./PortalBackend/Java
